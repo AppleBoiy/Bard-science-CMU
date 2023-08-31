@@ -159,12 +159,42 @@ def clear_terminal():
     elif os.name == 'nt':  # Windows
         os.system('cls')
 
-bot_name = "แอลลี"
 
-def get_response(input_text, token='xxxxx'):
-    # token = 'xxxxx' # your token
+def main():
+    token="aQh_6DFgTA3TCrIA2QP5I2PdOj5a9NClk30Fnv_dxRfRnqqLBWCGAI4cyrNghQILJwvSPA."
     bard = warmup(token)
-    conversation = f"\nUser: {input_text}"
-    response = bard.get_answer(conversation)['content']
-    return response
 
+    user_name = "คุณ"
+    bot_name = "แอนนา"
+
+    print(f"สวัสดี ฉันชื่อ{bot_name} มีอะไรต้องการให้ฉันช่วยมั้ย???")
+
+    # Conversation loop
+    while True:
+        input_text = input(f"{user_name}: ")
+        print(get_formatted_time())
+
+        if input_text.lower() == "clear" or input_text.lower() == "cls":
+            clear_terminal()
+            print(f"สวัสดี ฉันชื่อ{bot_name} มีอะไรต้องการให้ฉันช่วยมั้ย???")
+            continue
+
+        random_sleep()
+        typing_animation()  # Display typing animation
+
+        conversation = f"\n{user_name}: {input_text}"
+        response = bard.get_answer(conversation)['content']
+
+        print(f"{bot_name} : { get_formatted_time()}")
+        for ans in styled_res(response):
+            print(ans.ljust(100))
+
+def styled_res(res_text: str) -> list:
+	result = []
+	while res_text:
+		result.append(res_text[:100])
+		res_text = res_text[100:]
+	return result
+
+if __name__ == "__main__":
+    main()

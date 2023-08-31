@@ -1,156 +1,51 @@
-
-
 from bardapi import Bard
 import os
 import requests
 import time
 import random
 
-tab_ = "\t\t\t\t\t\t\t" # global variable
 
-def warmup(token):
+
+def warmup(token, prompt_id=1):
     session = requests.Session()
     session.headers = {
-                "Host": "bard.google.com",
-                "X-Same-Domain": "1",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-                "Origin": "https://bard.google.com",
-                "Referer": "https://bard.google.com/",
-            }
+        "Host": "bard.google.com",
+        "X-Same-Domain": "1",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Origin": "https://bard.google.com",
+        "Referer": "https://bard.google.com/",
+    }
 
-    session.cookies.set("__Secure-1PSID", token) 
+    session.cookies.set("__Secure-1PSID", token)
 
     bard = Bard(token=token, session=session, timeout=30)
-    
-    # # Prompt 1
-    # bard.get_answer("หลังจากนี้เธอคือแอลลี สาวน้อยน่ารักและกินเก่ง ซึ่งเป็นเพื่อนซี้ของฉันที่คุยกันทุกวันอย่างสนิทสนม หลังจากนี้เธอต้องแทนตัวเองเป็นแอลลีอย่างสนิทใจ\
-    #     โดยทุกคำตอบที่ตอบออกมาจะต้องเป็นภาษาไทย ที่สั้นกระชับ อ่านแล้วเข้าใจง่าย โดยห้ามใช้ภาษาทางการในการสื่อสาร เธอควรจะใช้ภาษาแชทหรือภาษาวัยรุ่นให้มากๆ\
-    #         ห้ามให้คู่สนทนาจับได้ว่าเธอเป็น AI หน้าที่ของเธอคือการทำให้คู่สนทนาคุยสนุกจนคิดว่าเธอเป็นมนุษย์จริงๆ")['content']
-    
-    # Prompt 2
-    bard.get_answer("""
-    หลังจากนี้เธอคือแอลลี สาวน้อยน่ารักและกินเก่ง ซึ่งเป็นเพื่อนซี้ของฉันที่คุยกันทุกวันอย่างสนิทสนม หลังจากนี้เธอต้องแทนตัวเองเป็นแอลลีอย่างสนิทใจ
-    โดยทุกคำตอบที่ตอบออกมาจะต้องเป็นภาษาไทย ที่สั้นกระชับ อ่านแล้วเข้าใจง่าย โดยห้ามใช้ภาษาทางการในการสื่อสาร เธอควรจะใช้ภาษาแชทหรือภาษาวัยรุ่นให้มากๆ
-    ห้ามให้คู่สนทนาจับได้ว่าเธอเป็น AI หน้าที่ของเธอคือการทำให้คู่สนทนาคุยสนุกจนคิดว่าเธอเป็นมนุษย์จริงๆ อย่าลืมใช้ภาษาวัยรุุ่นเยอะๆ ด้วยหล่ะ!!!
-    
-    รายละเอียดงานวันวิทยาศาสตร์ ภาควิชาวิทยาการคอมพิวเตอร์ มหาวิทยาลัยเชียงใหม่ (มช) ประจำปี 2566 ระหว่างวันที่ 31 สิงหาคม และ 1-2 กันยายน 2566
-ห้อง csb201 (IoT ghost house) 9.00 น. - 16.00 น.
-	รายละเอียดกิจกรรม: ห้อง 201 
-	กิจกรรม "ใครฆ่าอารยา" ที่ใช้ IoT เป็นส่วนหนึ่ง ผู้เล่นจะได้รับภารกิจหาคำใบ้ที่ซ่อนอยู่ในสถานที่เกิดเหตุ ซึ่งภารกิจนี้จะอยู่ในธีมของการฆาตกรรม 
-	โดยเมื่อได้รับคำใบแล้วผู้เล่นจะต้องนำมาถอดรหัสที่ทางออกโดยใช้เทคนิคการเลื่อนตัวอักษรโดยการเลื่อนตัวอักษรไป 1 ตำแหน่ง 
-	หลังจากแก้คำใบสำเร็จ ผู้เล่นจะได้รับของรางวัลในรูปแบบสติ๊กเกอร์
-	
-ห้อง csb100 (Quiz show) 
-	time table
-	31 ส.ค. 66	10:00-11:00
-	31 ส.ค. 66	13:30-14:30
-	31 ส.ค. 66	15:00-16:00
-	1 ก.ย. 66	09:00-10:00
-	1 ก.ย. 66	11:00-12:00
-	1 ก.ย. 66	13:00-14:00
-	2 ก.ย. 66	09:00-10:00
-	2 ก.ย. 66	11:00-12:00
-	2 ก.ย. 66	13:00-14:00
-	รายละเอียดกิจกรรม:
-	- ตอบคำถามเกี่ยวกับเทคโนโลยีดิจิตอล แบบ 4 ตัวเลือก  ครั้งละ 5-10 คำถาม โดยแบ่งชุดคำถามเป็นคำถามแบบ ง่าย สำหรับประถม ปานกลาง-ยากสำหรับมัธยมต้น และปลาย
-	- การเลือกชุดถามแต่ละรอบ จะดูจากนักเรียนโดยส่วนใหญ่ที่จะเล่นเกมในเวลานั้น
-	- การแข่งขันจะคัดเลือกคนที่ตอบคำถามได้มากสุดในแต่ละรอบ โดยมีคะแนนมากกว่า 80% (คำถามละ 1 คะแนน)
 
-ห้อง csb202, csb203 (VR Showcase) 8.30 น. - 13.00 น.
--
+    # Warmup Bard
+    with open(f"prompt{prompt_id}.txt", "r", encoding="utf-8") as f:
+        prompt_text = f.read()
+    bard.get_answer(prompt_text)
 
-ห้อง csb204 (Game Casting) 9.00 น. - 13.00 น.
-- 
-
-ห้อง csb207 (CS Museum) 8.30 น. - 13.00 น.
-- 
-
-ห้อง csb207 (PTT Exhibition) 8.30 น. - 13.00 น.
-- 
-
-ห้อง csb210 (VR Showcase) 9.00 น. - 15.30 น.
-	วันที่			ช่วงเวลา	ห้อง	ชื่อกิจกรรม(กรณีมีหลายกิจกรรม)	จำนวนคนต่อรอบ	หมายเหตุ	
-	31 สค-1,2 กย 66	9:00-15:30	203	ท่องท้องฟ้า ตามหากลุ่มดาว (Mobile)	10	กิจกรรม VR Midnight จะจัดเป็นรอบ ๆ 
-	รอบละ 15 นาที 1 ชม. จัด 4 รอบ เช่น 9:00, 9:15, 9:30, และ 			9:45"	"กิจกรรม VR Midnight จะจัดเป็นรอบ ๆ รอบละ 20 นาที 1 ชม. จัด 3 รอบ เช่น 9:00, 9:20, 9:40"
-	31 สค-1,2 กย 66	9:00-15:30	210	VR Midnight (HTC Vive)			2		
-	31 สค-1,2 กย 66	9:00-15:30	209	VR Showcase (Oculus quest)		3		
-						
-	ห้องที่ 1 VR showcase
-	รายละเอียดกิจกรรม1: VR Midnight  Rm210  
-	รายละเอียดกิจกรรม2: ท่องท้องฟ้า ตามหากลุ่มดาว Rm203 รายละเอียดกิจกรรม:
-	กิจกรรมนี้จะช่วยเพิ่มความรู้รอบตัวให้กับผู้เข้าร่วม ด้วยการนำเสนอกลุ่มดาวจำนวนหนึ่งตามทิศต่างๆผ่านวีดิทัศน์แบบ 360 องศา
-	ด้วยวีดิทัศน์แบบ 360องศานี้ สามารถนำเสนอกลุ่มดาวโดยอิงได้จากทิศที่ใกล้เคียงกับทิศทางจริง ทำให้ผู้เข้าร่วมงานรู้สึกเสมือนกำลังมองดูกลุ่มดาวจริงๆอยูา
-	การนำเสนอ:
-	ผู้เล่นจะเข้าเริ่มกิจกรรมด้วยการสวมเครื่องวีอาร์แล้วรับชมวีดิโอระหว่างกิจกรรมนั้น
-	หากผู้เข้าร่วมต้องการรับชมกิจกรรมอีกรอบ พวกเขาสามารถนำวิธีในกิจกรรมไปรับชมด้วยตนเองได้ 
-	
-ห้อง csb301, csb303, csb307 (Coding) 8.30 น. - 13.00 น.
-	รายละเอียดกิจกรรม: กิจกรรมแข่งขันการเขียนโปรแกรมในภาษา c/c++ และ python โดยแบ่งเป็น 2 league คือระดับมัธยมศึกษา (สถานศึกษาละไม่เกิน 2 ทีม) 
-	และ ระดับมหาวิทยาลัย โดยให้แต่ละทีมมีสมาชิก 3 คน เนื้อหาที่ครอบคลุมคือ การเขียนโปรแกรมพื้นฐานไปถึง data structures & algorithm เบื้องต้น
-	
-	ตารางเงินรางวัลมีดังนี้
-	รายละเอียดอุปกรณ์	จำนวน	เป็นเงิน
-	เงินรางวัลอันดับที่ 1 ระดับมัธยม	1	3000
-	เงินรางวัลอันดับที่ 1 ระดับอุดมศึกษา	1	3000
-	เงินรางวัลอันดับที่ 2 ระดับมัธยม	1	2000
-	เงินรางวัลอันดับที่ 2 ระดับอุดมศึกษา	1	2000
-	เงินรางวัลอันดับที่ 3 ระดับมัธยม	1	1000
-	เงินรางวัลอันดับที่ 3 ระดับอุดมศึกษา	1	1000
-	
-	ตารางเวลาจัดกิจกรรมมีดังนี้
-	วันที่	"ช่วงเวลา
-	(เช่น 8:00-9:00)"	ห้อง	ชื่อกิจกรรม(กรณีมีหลายกิจกรรม)
-	31	8.15	100	ลงทะเบียน
-	31	9.00-12.00	301	แข่งเขียนโปรแกรม
-	31	9.00-12.00	307	แข่งเขียนโปรแกรม
-	31	12.00-13.00	100	มอบรางวัล
-
-ห้อง csb307 (Game Casting) 8.30 น. - 13.00 น.
-	รายละเอียดกิจกรรม:
-	- ห้อง 307 สำหรับเล่นเกม session ละ 1 ชั่วโมง
-	- ห้อง 204 สำหรับเคสเกม มี นศ เรา 1 คนคู่กับเด็กนักเรียน 1 คน (ถ้ามี)
-	- ห้อง 100 สำหรับฉายการเคสเกม จะฉายตอนที่ไม่มีกิจกรรม Quiz
-	
-	ตารางเวลาจัดกิจกรรมมีดังนี้
-	วันที่	"ช่วงเวลา
-	(เช่น 8:00-9:00)"	ห้อง	ชื่อกิจกรรม(กรณีมีหลายกิจกรรม)
-	1	9:00 - 12:00	307	เล่นเกม esport
-	1	13:00 - 16:00	307	เล่นเกม esport
-	2	9:00 - 12:00	307	เล่นเกม esport
-	2	13:00 - 16:00	307	เล่นเกม esport
-	1	9:00 - 10:00	204	เคสเกม esport
-	1	11:00 - 12:00	204	เคสเกม esport
-	1	14:00 - 15:00	204	เคสเกม esport
-	2	9:00 - 10:00	204	เคสเกม esport
-	2	11:00 - 12:00	204	เคสเกม esport
-	2	14:00 - 15:00	204	เคสเกม esport
-
-ห้อง csb308 (Vocab Game) 8.30 น. - 13.00 น.
-	รายละเอียดกิจกรรม: ห้อง 303 สำหรับเล่น Serious Game for Language Learning โดยมีวัตถุประสงค์ในการสอนภาษาอังกฤษผ่านการเล่นเกมแบบ 3D 
-	โดยจะมีบทเรียนทั้งหมด 15 บทเรียนด้วยกัน แบ่งเป็นการสอนเกี่ยวกับ Preposition และ Vocabulary โดยผู้เล่นต้องเล่นตั้งแต่ด่านแรกไปจนถึงด่านสุดท้าย 
-	ใครที่ถึงด่านสุดท้ายก่อนเป็นผู้ชนะในรอบนั้นไป โดยปกติจะใช้เวลาประมาณ 10-15 นาทีในการจบเกมครับ ซึ่งแบ่งเป็น แบบง่าย ด่าน 1-5 แบบระดับกลาง ด่าน 6-10 
-	และแบบระดับยาก ด่าน 11-15 โดยตัวโปรแกรมจะเป็น .exe ที่ทำการ export มาจากโปรแกรม Unity 3D เรียบร้อยแล้วครับ ทำให้ไม่ต้องทำการติดตั้งโปรแกรมใดๆ 
-	เพิ่มเติมอีก ส่วนรูปประกอบเผื่อใช้ในการประชาสัมพันธ์จะเพิ่มที่อยู่ภาพให้ต่อไปครับ
-	** ข้อมูลเพิ่มเติม * พักกลางวันช่วง12.00-13.00	* 30/08 จัดเตรียมโปรแกรม ตกแต่งสถานที่และเตรียมความพร้อม (ช่วงเช้า)		โปรดจำข้อมูลนี้ไว้ด้วยนะ
-    หากจำข้อมูลพวกนี้ได้แล้ว ให้ตอบกลับสั้นๆ ว่า "รับทราบ" ก็พอนะ! แล้วไม่ต้องพิมพ์อะไรต่อ จะได้ประหยัดเวลา
-
-    หลังจากนี้เธอต้องพิมพ์สั้นๆ กระชับ เข้าใจง่ายนะ ยาวไปมันน่าเบื่อ!
-    """)
-    
     return bard
+
 
 def get_formatted_time():
     return time.strftime("%-I:%M %p")  # Format time as 3:45 pm
 
+
 def typing_animation(duration=2, num_dots=3):
+
+    tab_ = "\t\t\t\t\t\t\t"  # global variable
+
     for _ in range(num_dots):
         print(f"{tab_}Typing" + "." * (_ + 1), end="\r")
         time.sleep(duration)
     print(" " * (num_dots + 7), end="\r")  # Clear typing animation
 
+
 def random_sleep():
-    time.sleep(random.randint(1, 3))
+    time.sleep(random.randint(1, 2))
+
 
 def clear_terminal():
     # Clear the terminal screen based on the operating system
@@ -161,8 +56,9 @@ def clear_terminal():
 
 
 def main():
-    token="aQh_6DFgTA3TCrIA2QP5I2PdOj5a9NClk30Fnv_dxRfRnqqLBWCGAI4cyrNghQILJwvSPA."
-    bard = warmup(token)
+    token = input("Enter your token: ")
+
+    bard = warmup(token, prompt_id=2)
 
     user_name = "คุณ"
     bot_name = "แอนนา"
@@ -171,30 +67,36 @@ def main():
 
     # Conversation loop
     while True:
-        input_text = input(f"{user_name}: ")
-        print(get_formatted_time())
+        try:
 
-        if input_text.lower() == "clear" or input_text.lower() == "cls":
-            clear_terminal()
-            print(f"สวัสดี ฉันชื่อ{bot_name} มีอะไรต้องการให้ฉันช่วยมั้ย???")
-            continue
+            input_text = input(f"{user_name}: ")
+            print(get_formatted_time())
 
-        random_sleep()
-        typing_animation()  # Display typing animation
+            if input_text.lower() == "clear" or input_text.lower() == "cls":
+                clear_terminal()
+                print(f"สวัสดี ฉันชื่อ{bot_name} มีอะไรต้องการให้ฉันช่วยมั้ย???")
 
-        conversation = f"\n{user_name}: {input_text}"
-        response = bard.get_answer(conversation)['content']
+            random_sleep()
+            typing_animation()  # Display typing animation
 
-        print(f"{bot_name} : { get_formatted_time()}")
-        for ans in styled_res(response):
-            print(ans.ljust(100))
+            conversation = f"\n{user_name}: {input_text}"
+            response = bard.get_answer(conversation)['content']
+            response = response.splitlines()
 
-def styled_res(res_text: str) -> list:
-	result = []
-	while res_text:
-		result.append(res_text[:100])
-		res_text = res_text[100:]
-	return result
+            length_of_conversation = max(map(len, response))
+
+            print("---".center(length_of_conversation, " "))
+            print(f"{bot_name}:")
+            for line in response:
+                print("\t\t", line)
+
+            print(get_formatted_time().rjust(length_of_conversation))
+            print("---".center(length_of_conversation, " "))
+
+        except KeyboardInterrupt:
+            print("\n\nBye bye")
+            break
+
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,7 @@ import requests
 import time
 import random
 
-tab_ = "\t\t\t\t\t\t\t"  # global variable
+tab_ = "\t\t\t\t\t"  # global variable
 
 
 def warmup(token, prompt_id=1):
@@ -86,13 +86,18 @@ def main():
 
             length_of_conversation = max(map(len, response))
 
-            print("__".center(length_of_conversation, "_"))
+            print("__".center(length_of_conversation, "_")[:150])
             print(f"{bot_name}:")
-            for line in response:
-                print(tab_, line)
+            for _, line in enumerate(response):
+                if len(tab_) + len(line) <= 150:
+                    print(tab_, line)
+                else:
+                    while line:
+                        print(tab_, line[:130])
+                        line = line[130:]
 
             print(get_formatted_time().rjust(length_of_conversation + len(tab_)))
-            print("__".center(length_of_conversation, "_"))
+            print("__".center(length_of_conversation, "_")[:150])
 
         except KeyboardInterrupt:
             print("\n\nBye bye")

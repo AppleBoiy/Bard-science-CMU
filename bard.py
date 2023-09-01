@@ -36,8 +36,6 @@ def get_formatted_time():
 
 
 def typing_animation(duration=2, num_dots=3):
-
-
     for _ in range(num_dots):
         print(f"{tab_}Typing" + "." * (_ + 1), end="\r")
         time.sleep(duration)
@@ -82,11 +80,15 @@ def main():
 
             conversation = f"\n{user_name}: {input_text}"
             response = bard.get_answer(conversation)['content']
+
+            if response.startwith("Response Error"):
+                raise TimeoutError(response)
+
             response = response.splitlines()
 
             length_of_conversation = max(map(len, response))
 
-            print("__".center(length_of_conversation, "_")[:150])
+            print("__".center(150, "_"))
             print(f"{bot_name}:")
             for _, line in enumerate(response):
                 if len(tab_) + len(line) <= 150:
@@ -97,10 +99,19 @@ def main():
                         line = line[130:]
 
             print(get_formatted_time().rjust(length_of_conversation + len(tab_)))
-            print("__".center(length_of_conversation, "_")[:150])
+            print("__".center(150, "_"))
 
         except KeyboardInterrupt:
             print("\n\nBye bye")
+            break
+
+        except TimeoutError:
+            token = input("Enter your token: ")
+            bard = warmup(token, prompt_id=2)
+            continue
+
+        except Exception as e:
+            print(e)
             break
 
 

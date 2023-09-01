@@ -4,6 +4,7 @@ import requests
 import time
 import random
 
+tab_ = "\t\t\t\t\t\t\t"  # global variable
 
 
 def warmup(token, prompt_id=1):
@@ -22,9 +23,10 @@ def warmup(token, prompt_id=1):
     bard = Bard(token=token, session=session, timeout=30)
 
     # Warmup Bard
-    with open(f"prompt{prompt_id}.txt", "r", encoding="utf-8") as f:
-        prompt_text = f.read()
-    bard.get_answer(prompt_text)
+    if prompt_id:
+        with open(f"prompt{prompt_id}.txt", "r", encoding="utf-8") as f:
+            prompt_text = f.read()
+        bard.get_answer(prompt_text)
 
     return bard
 
@@ -35,7 +37,6 @@ def get_formatted_time():
 
 def typing_animation(duration=2, num_dots=3):
 
-    tab_ = "\t\t\t\t\t\t\t"  # global variable
 
     for _ in range(num_dots):
         print(f"{tab_}Typing" + "." * (_ + 1), end="\r")
@@ -85,13 +86,13 @@ def main():
 
             length_of_conversation = max(map(len, response))
 
-            print("---".center(length_of_conversation, " "))
+            print("__".center(length_of_conversation, "_"))
             print(f"{bot_name}:")
             for line in response:
-                print("\t\t", line)
+                print(tab_, line)
 
-            print(get_formatted_time().rjust(length_of_conversation))
-            print("---".center(length_of_conversation, " "))
+            print(get_formatted_time().rjust(length_of_conversation + len(tab_)))
+            print("__".center(length_of_conversation, "_"))
 
         except KeyboardInterrupt:
             print("\n\nBye bye")

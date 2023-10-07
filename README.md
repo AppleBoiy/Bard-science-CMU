@@ -1,11 +1,19 @@
 # Bard-science-CMU
 
 ## Usage
-* pip install bardapi
+
+* install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
 * Visit https://bard.google.com/
 * F12 for console
-* Session: Application → Cookies → Copy the value of __Secure-1PSID cookie.
-* press the token into bard.py
-* Run!
+* Run program
+
+```bash
+python main.py
+```
 
 Ref: https://github.com/dsdanielpark/Bard-API

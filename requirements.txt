@@ -1,4 +1,3 @@
-tk
 bard
 bardapi~=0.1.33
 requests~=2.31.0

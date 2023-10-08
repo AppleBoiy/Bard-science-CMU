@@ -8,8 +8,6 @@
 pip install -r requirements.txt
 ```
 
-* Visit https://bard.google.com/
-* F12 for console
 * Run program
 
 ```bash
